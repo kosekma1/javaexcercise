@@ -1,4 +1,4 @@
-package com.martin.advanced;
+package com.martin.advanced.writeobject;
 
 import java.io.Serializable;
 
