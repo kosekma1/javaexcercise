@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 
 public class JDBCCallProcedures {
 	
@@ -22,6 +23,8 @@ public class JDBCCallProcedures {
 			try {
 				myConn = DriverManager.getConnection(DB_URL, USER, PASS);
 				
+				
+				// IN parameters				
 				String theDepartment = "Engineering";
 				int theIncreaseAmount = 10000;
 				
@@ -40,6 +43,50 @@ public class JDBCCallProcedures {
 				
 				System.out.println("\n\nSalaries AFERT\n");
 				showSalaries(myConn, theDepartment);
+				
+				
+				// INOUT Parameters
+				myStmt = myConn.prepareCall("{call greet_the_department(?)}");
+				myStmt.registerOutParameter(1,  Types.VARCHAR); // use this for INOUT
+				myStmt.setString(1, theDepartment);
+				
+				System.out.println("\nCalling stored procedure.  greet_the_department('" + theDepartment + "')");
+				myStmt.execute();
+				System.out.println("Finished calling stored procedure");
+				
+				String theResult = myStmt.getString(1);
+				
+				System.out.println("\nThe result = " + theResult);
+				
+				
+				// OUT Parameters
+				myStmt = myConn.prepareCall("{call get_count_for_department(?, ?)}");
+				myStmt.setString(1, theDepartment);
+				myStmt.registerOutParameter(2, Types.INTEGER);
+				
+				System.out.println("\nCalling stored procedure.  get_count_for_department('" + theDepartment +"')" );
+				myStmt.execute();
+				System.out.println("Finished calling stored procedure");
+				
+				int theCount = myStmt.getInt(2);
+				
+				System.out.println("The count = " + theCount);
+				
+				
+				// Procedure returning Resultset
+				myStmt = myConn.prepareCall("{call get_employees_for_department(?)}");
+				myStmt.setString(1, theDepartment);
+				
+				System.out.println("\nCalling stored procedure.  get_employees_for_department('" + theDepartment +"')" );
+				myStmt.execute();
+				System.out.println("Finished calling stored procedure");
+				
+				ResultSet myRs = myStmt.getResultSet();
+				
+				while(myRs.next()) {
+					System.out.println(myRs.getString("last_name") + ", " + myRs.getString("first_name") + ", " + myRs.getDouble("salary"));
+				}
+				
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
