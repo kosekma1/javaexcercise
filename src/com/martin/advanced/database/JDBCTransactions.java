@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.Scanner;
 
 public class JDBCTransactions {
 	
@@ -19,8 +20,8 @@ public class JDBCTransactions {
 	
 	static final String DB_URL = "jdbc:mysql://localhost:3306/demo?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Prague";
 	
-	static final String USER = "root";
-	static final String PASS = "";
+	static final String USER = "student";
+	static final String PASS = "student";
 
 	public static void main(String[] args) {
 		Connection myConn = null;
@@ -46,7 +47,18 @@ public class JDBCTransactions {
 				
 				System.out.println("Is transaction ready? y/n");
 				
-				boolean ok = true;
+				Scanner sc = new Scanner(System.in);
+				System.out.println("Is it OK to save? yes/no");
+				String answer = sc.next();
+				
+				boolean ok = false;
+				
+				if(answer.charAt(0)=='y' || answer.charAt(0)=='Y') {
+					ok = true;
+				} else {
+					ok = false;
+				}
+								
 				
 				if(ok) {
 					// store in database
@@ -54,6 +66,7 @@ public class JDBCTransactions {
 					System.out.println("\n>> Transaction COMMITTED.\n");
 				} else {
 					// discard
+					myConn.rollback();
 					System.out.println("\n>> Transaction ROLLED BACK.\n");
 				}
 				
@@ -77,6 +90,7 @@ public class JDBCTransactions {
 			String sql = "SELECT * FROM employees WHERE department='" + department + "'";
 			ResultSet myRs = stmt.executeQuery(sql);
 			
+			System.out.println("Show salaries for department " + department);
 			while(myRs.next()) {
 				System.out.println(myRs.getString("last_name") + ", " + myRs.getString("first_name") + ", " + myRs.getDouble("salary"));
 			}
