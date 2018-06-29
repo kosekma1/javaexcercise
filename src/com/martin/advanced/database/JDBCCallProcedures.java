@@ -12,8 +12,8 @@ public class JDBCCallProcedures {
 	
 	static final String DB_URL = "jdbc:mysql://localhost:3306/demo?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Prague";
 	
-	static final String USER = "root";
-	static final String PASS = "";
+	static final String USER = "student";
+	static final String PASS = "student";
 
 	public static void main(String[] args) {
 		Connection myConn = null;

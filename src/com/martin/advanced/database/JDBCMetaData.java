@@ -61,17 +61,20 @@ public class JDBCMetaData {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
-				myConn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			close(myConn, myRs);
 		}										
 				
 	}
 	
 	private static void close(Connection myConn, ResultSet myRs) {
+		
+		try {
+			myConn.close();
+			myRs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 		
 	}
 

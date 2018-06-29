@@ -1,12 +1,10 @@
 package com.martin.advanced.database;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.Scanner;
 
 public class JDBCTransactions {
@@ -50,6 +48,7 @@ public class JDBCTransactions {
 				Scanner sc = new Scanner(System.in);
 				System.out.println("Is it OK to save? yes/no");
 				String answer = sc.next();
+				sc.close();				
 				
 				boolean ok = false;
 				
@@ -90,7 +89,7 @@ public class JDBCTransactions {
 			String sql = "SELECT * FROM employees WHERE department='" + department + "'";
 			ResultSet myRs = stmt.executeQuery(sql);
 			
-			System.out.println("Show salaries for department " + department);
+			System.out.println("\nShow salaries for department " + department);
 			while(myRs.next()) {
 				System.out.println(myRs.getString("last_name") + ", " + myRs.getString("first_name") + ", " + myRs.getDouble("salary"));
 			}
